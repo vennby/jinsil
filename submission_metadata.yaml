@@ -50,19 +50,15 @@ compute:
 # ============================================================================
 # AI tools declaration
 # ============================================================================
-# Transparency only — declared use is NOT penalized. Be honest. Stage 5 interview
-# may verify these declarations against your code; declarations that contradict
-# your code or your interview are flagged.
 ai_tools_used:
-  - "Claude" # e.g. for architecture discussion, code review
-  - "GitHub Copilot" # e.g. for autocomplete
-  # Other options: "ChatGPT", "Cursor", "Gemini", "Codeium", "Other", "None"
+  - "GitHub Copilot"
+  - "Cursor"
 
 ai_usage_summary: |
   Briefly describe how AI tools were used. Examples:
   - "Used Claude for code review and architectural discussion. Used Copilot for autocomplete.
      No candidate data was fed to any LLM."
-  - "Used ChatGPT to debug Python issues and Cursor for refactoring."
+  - "Used Copilot and Cursor for autocompleting code."
   - "No AI tools used."
 
 # ============================================================================

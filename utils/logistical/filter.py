@@ -1,7 +1,6 @@
 import csv
 from pathlib import Path
-# Edit these values manually based on the columns produced by extraction.py.
-# Supported rule keys: min, max, equals, not_equals, in.
+
 FILTERS = {
     "years_of_experience": {"min": 3},
     "profile_completeness_score": {"min": 50},
