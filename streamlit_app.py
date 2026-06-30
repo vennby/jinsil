@@ -59,6 +59,7 @@ st.markdown(
     """
     <style>
       :root {
+        color-scheme: light;
         --ink: #0f172a;
         --muted: #64748b;
         --line: #e2e8f0;
@@ -67,6 +68,40 @@ st.markdown(
         --soft: #f8fafc;
         --soft-blue: #eff6ff;
         --soft-orange: #fff7ed;
+      }
+
+      html, body, [data-testid="stAppViewContainer"], .stApp {
+        background: #ffffff !important;
+        color: var(--ink) !important;
+      }
+
+      [data-testid="stAppViewContainer"] > .main {
+        background: #ffffff !important;
+      }
+
+      [data-testid="stSidebar"],
+      [data-testid="stSidebarContent"],
+      [data-testid="stBottomBlockContainer"] {
+        background: #ffffff !important;
+        color: var(--ink) !important;
+      }
+
+      div, p, span, label, h1, h2, h3, h4, h5, h6 {
+        color-scheme: light;
+      }
+
+      input, textarea, select,
+      [data-baseweb="input"],
+      [data-baseweb="textarea"],
+      [data-baseweb="select"],
+      [data-baseweb="slider"],
+      [data-baseweb="tab-list"] {
+        color-scheme: light;
+      }
+
+      textarea, input {
+        background: #ffffff !important;
+        color: var(--ink) !important;
       }
 
       .block-container {
