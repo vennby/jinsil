@@ -4,9 +4,16 @@ from datetime import date
 TOP_N = 100
 HEAP_SIZE = 1200
 DEFAULT_OUTPUT_PATH = "team_jinsil.csv"
+DEFAULT_PRECOMPUTE_PATH = "precomputed_rank_signals.json"
+DEFAULT_CANDIDATE_PATHS = (
+    "candidates.jsonl.gz",
+    "candidates.jsonl",
+    "candidates.json",
+)
 DEFAULT_PROGRESS_EVERY = 10000
 FINAL_SCORE_SCALE = 1.15
 REFERENCE_DATE = date(2026, 6, 29)
+PRECOMPUTE_SIGNAL_WEIGHT = 0.3
 
 PROFICIENCY_WEIGHT = {
     "beginner": 0.35,
@@ -31,6 +38,13 @@ MUST_HAVE_TERMS = {
     "rule-based scoring": 0.7,
     "vector database": 1.2,
     "hybrid search": 1.25,
+    "sentence-transformers": 0.9,
+    "openai embeddings": 0.85,
+    "bge": 0.75,
+    "e5": 0.75,
+    "embedding drift": 1.15,
+    "retrieval quality": 1.0,
+    "retrieval-quality regression": 1.15,
     "faiss": 1.1,
     "elasticsearch": 1.0,
     "opensearch": 1.0,
@@ -41,6 +55,8 @@ MUST_HAVE_TERMS = {
     "llm": 0.7,
     "llm reranking": 1.0,
     "reranking": 0.9,
+    "learning-to-rank": 0.65,
+    "xgboost": 0.45,
     "nlp": 0.9,
     "rag": 0.7,
     "ndcg": 1.1,
@@ -48,6 +64,10 @@ MUST_HAVE_TERMS = {
     "map": 0.7,
     "a/b": 0.7,
     "ab test": 0.7,
+    "offline-to-online": 0.9,
+    "relevance": 0.6,
+    "relevance labeling": 0.75,
+    "relevance evaluation": 0.95,
 }
 
 CORE_RETRIEVAL_TERMS = {
@@ -64,6 +84,9 @@ CORE_RETRIEVAL_TERMS = {
     "bm25",
     "vector database",
     "hybrid search",
+    "embedding drift",
+    "retrieval quality",
+    "retrieval-quality regression",
     "faiss",
     "elasticsearch",
     "opensearch",
@@ -72,6 +95,7 @@ CORE_RETRIEVAL_TERMS = {
     "milvus",
     "weaviate",
     "reranking",
+    "learning-to-rank",
 }
 
 EVALUATION_TERMS = {
@@ -86,8 +110,10 @@ EVALUATION_TERMS = {
     "evaluation framework",
     "relevance evaluation",
     "ranking evaluation",
+    "offline-to-online",
     "recruiter feedback",
     "feedback loop",
+    "relevance labeling",
 }
 
 PRODUCTION_TERMS = {
@@ -102,6 +128,9 @@ PRODUCTION_TERMS = {
     "regression",
     "index refresh",
     "quality regression",
+    "embedding drift",
+    "retrieval-quality regression",
+    "offline-to-online",
 }
 
 PRODUCT_OWNERSHIP_TERMS = {
@@ -110,11 +139,18 @@ PRODUCT_OWNERSHIP_TERMS = {
     "pm",
     "roadmap",
     "recruiter",
+    "recruiter workflow",
+    "candidate workflow",
+    "talent intelligence",
     "workflow",
     "marketplace",
     "experimentation",
     "metrics",
     "engagement",
+    "early-stage",
+    "founding",
+    "scrappy",
+    "iterate",
 }
 
 LEADERSHIP_TERMS = {
@@ -125,6 +161,8 @@ LEADERSHIP_TERMS = {
     "technical lead",
     "architecture",
     "design review",
+    "mentoring",
+    "senior engineer judgment",
 }
 
 ADJACENT_TERMS = {
@@ -138,6 +176,14 @@ ADJACENT_TERMS = {
     "clustering": 0.3,
     "feature engineering": 0.45,
     "model deployment": 0.55,
+    "fine-tuning": 0.35,
+    "lora": 0.3,
+    "qlora": 0.3,
+    "peft": 0.3,
+    "distributed systems": 0.35,
+    "inference optimization": 0.35,
+    "large-scale inference": 0.35,
+    "open-source": 0.25,
     "production": 0.45,
     "api": 0.25,
     "backend": 0.35,

@@ -18,12 +18,9 @@ team_members:
 # ============================================================================
 github_repo: "https://github.com/vennby/jinsil"
 
-sandbox_link: "https://huggingface.co/spaces/vennby/redrob-ranker"
-# Required. A working hosted environment where the ranker can be run on a small
-# candidate sample. See Section 10.5 of submission_spec.md for acceptable
-# platforms (HuggingFace Spaces, Streamlit Cloud, Replit, Colab, Docker, Binder).
+sandbox_link: "https://jinsil.streamlit.app"
 
-reproduce_command: "python rank.py --candidates ./candidates.jsonl.gz --out ./team_jinsil.csv"
+reproduce_command: "python precompute.py; python rank.py"
 
 # ============================================================================
 # Compute environment
@@ -36,8 +33,8 @@ compute:
   os: "Windows 10 22H2, build 19045"
   uses_gpu_for_inference: false
   has_network_during_ranking: false
-  pre_computation_required: false
-  pre_computation_time_minutes: 0
+  pre_computation_required: true
+  pre_computation_time_minutes: 9
 
 ai_tools_used:
   - "Cursor"
@@ -51,21 +48,22 @@ ai_usage_summary: |
 # Approach summary
 # ============================================================================
 methodology_summary: |
-  Modular deterministic ranker in utils/ranking with rank.py as the single CLI
-  entry point. The ranking step is CPU-only, no-network, streams candidates, and
-  keeps only a bounded top-K heap; on 100K local candidates it completed in
-  ~290s. Scoring is evidence-based rather than a flat keyword count: it combines
-  trusted skill evidence, current-title fit, current-vs-historical career
-  evidence, seniority, product-company context, location/logistics, Redrob
-  availability, trust signals, and a JD-shaped evidence-depth score. Evidence
-  depth rewards combinations of retrieval/ranking/matching systems, BM25 or
-  hybrid search exposure, embeddings/vector DBs, production shipping,
-  evaluation infrastructure (NDCG/MAP/A-B/offline benchmarks), recruiter/product
-  workflow ownership, and mentoring/architecture signals. Penalties down-rank
-  non-engineering roles, consulting-only trajectories, pure research without
-  production, CV/speech/robotics mismatch, keyword stuffing, stale availability,
-  and honeypot-like skill inconsistencies. Reasoning is generated directly from
-  the scored facts.
+  Hybrid offline candidate discovery system with JD understanding as the first
+  step. precompute.py builds a structured interpretation of the JD: role mandate,
+  must-have retrieval/ranking/embedding evidence, evaluation and production
+  requirements, product/recruiter workflow context, logistics, ideal profile, and
+  explicit negative signals. It then converts that JD profile into fixed
+  retrieval concepts, scans the candidate corpus, computes BM25-style semantic
+  relevance, derives structured fit features, and applies fixed JD-derived
+  coverage weights. It does not train on candidate data. It writes
+  precomputed_rank_signals.json, a 15K-candidate shortlist with semantic,
+  coverage, and hybrid scores. rank.py then streams the corpus, scores only
+  shortlisted candidates, and combines the hybrid signal with trusted skills,
+  title fit, career evidence, evidence depth, seniority, product context,
+  logistics, availability, trust, and risk penalties in a bounded top-K heap.
+  Reasoning is one sentence per candidate, generated only from scored facts.
+  On 100K candidates, final ranking completed in 53.2s and produced a valid
+  submission.
 
 # ============================================================================
 # Declarations

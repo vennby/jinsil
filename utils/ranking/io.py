@@ -4,6 +4,22 @@ import json
 import sys
 from pathlib import Path
 
+from .config import DEFAULT_CANDIDATE_PATHS
+
+
+def resolve_candidate_path(path=None):
+    if path:
+        return path
+
+    for candidate_path in DEFAULT_CANDIDATE_PATHS:
+        if Path(candidate_path).exists():
+            return candidate_path
+
+    searched = ", ".join(DEFAULT_CANDIDATE_PATHS)
+    raise FileNotFoundError(
+        f"No candidate file provided and none of these defaults exist: {searched}"
+    )
+
 
 def iter_candidates(path):
     path = Path(path)
@@ -27,6 +43,20 @@ def iter_candidates(path):
 def log_progress(message, quiet=False):
     if not quiet:
         print(message, file=sys.stderr, flush=True)
+
+
+def load_precomputed_signals(path):
+    if not path:
+        return {}
+
+    with open(path, "r", encoding="utf-8") as file:
+        artifact = json.load(file)
+    return artifact.get("candidates", {})
+
+
+def write_precomputed_signals(artifact, output_path):
+    with open(output_path, "w", encoding="utf-8") as file:
+        json.dump(artifact, file, ensure_ascii=False, separators=(",", ":"))
 
 
 def write_submission(rows, output_path):
@@ -63,6 +93,9 @@ def write_diagnostics(rows, output_path):
         "penalty",
         "hireability_multiplier",
         "raw_score",
+        "semantic_score",
+        "coverage_score",
+        "hybrid_score",
         "core_signal_count",
         "eval_signal_count",
         "evidence_depth",
@@ -91,6 +124,9 @@ def write_diagnostics(rows, output_path):
                     "penalty": f"{components['penalty']:.4f}",
                     "hireability_multiplier": f"{components['hireability_multiplier']:.4f}",
                     "raw_score": f"{components['raw_score']:.4f}",
+                    "semantic_score": f"{components['semantic_score']:.4f}",
+                    "coverage_score": f"{components['coverage_score']:.4f}",
+                    "hybrid_score": f"{components['hybrid_score']:.4f}",
                     "core_signal_count": components["technical_details"]["core_signal_count"],
                     "eval_signal_count": components["technical_details"]["eval_signal_count"],
                     "evidence_depth": f"{components['evidence_depth']:.4f}",
